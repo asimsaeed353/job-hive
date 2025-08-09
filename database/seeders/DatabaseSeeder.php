@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,11 +14,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Clear all data of following tables in database
+        DB::table('job_listings')->truncate();
+        DB::table('users')->truncate();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // Call seeder classes
+        // we need users first so does the user ids so call to that seeder first
+        $this->call(RandomUserSeeder::class);
+        $this->call(JobSeeder::class);
+
     }
 }
