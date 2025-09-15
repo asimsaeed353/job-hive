@@ -20,8 +20,10 @@ class DatabaseSeeder extends Seeder
 
         // Call seeder classes
         // we need users first so does the user ids so call to that seeder first
+        $this->call(TestUserSeeder::class);
         $this->call(RandomUserSeeder::class);
         $this->call(JobSeeder::class);
 
     }
 }
+

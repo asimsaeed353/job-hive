@@ -15,7 +15,7 @@ return new class extends Migration
 
         // Modify Schema Table
         Schema::table('job_listings', function (Blueprint $table) {
-            $table->unsignedBigInteger('user_id')->after('id');
+             $table->unsignedBigInteger('user_id')->after('id');
 
             $table->integer('salary');
             $table->string('tags')->nullable();
@@ -35,7 +35,7 @@ return new class extends Migration
             $table->text('company_website')->nullable();
 
             // Add foreign key constraint
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

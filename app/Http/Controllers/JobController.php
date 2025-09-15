@@ -5,11 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Job;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class JobController extends Controller
 {
+    // Implement JobPolicies
+    use AuthorizesRequests;
     /**
      * Display a listing of the resource.
      */
@@ -54,7 +57,7 @@ class JobController extends Controller
         ]);
 
         // Hardcoded user ID
-        $validatedData['user_id'] = 1;
+        $validatedData['user_id'] = auth()->user()->id;
 
         // Check for the file, store it under /public and store the path
         if($request->hasFile('company_logo')){
@@ -86,6 +89,9 @@ class JobController extends Controller
      */
     public function edit(Job $job): View
     {
+        // check if user is authorized to do this action (using JobPolicy)
+        $this->authorize('update', $job);
+
         return view('jobs.edit')->with('job', $job);
     }
 
@@ -94,6 +100,10 @@ class JobController extends Controller
      */
     public function update(Request $request, Job $job)
     {
+
+        // check if user is authorized to do this action (using JobPolicy)
+        $this->authorize('update', $job);
+
         $validatedData = $request->validate([
            'title' => 'required|string|max:255',
             'description' => 'required|string',
@@ -113,7 +123,7 @@ class JobController extends Controller
             'company_description' => 'nullable|string',
             'company_logo' => 'nullable|image|mimes:jpeg,jpg,png,gif|max:2048',
             'company_website' => 'nullable|url'
-        ]); 
+        ]);
 
         // Check for the file, store it under /public and store the path
         if($request->hasFile('company_logo')){
@@ -139,6 +149,9 @@ class JobController extends Controller
      */
     public function destroy(Job $job) : RedirectResponse
     {
+        // check if user is authorized to do this action (using JobPolicy)
+        $this->authorize('delete', $job);
+
         if($job->company_logo){
             Storage::delete('public/logos/' . $job->company_logo);
         }

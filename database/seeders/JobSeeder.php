@@ -7,7 +7,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 
-class JobSeeder extends Seeder
+class  JobSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -17,14 +17,23 @@ class JobSeeder extends Seeder
         // Load job listings from file
         $jobListings = include database_path('seeders/data/job_listings.php');
 
-        // Get user ids from user variable
-        $userIds = User::pluck('id')->toArray();
+        // Get test user
+        $testUserId = User::where('email', 'test@test.com')->value('id');
+
+        // Get all other user ids from model
+        $userIds = User::where('email', '!=', 'test@test.com')->pluck('id')->toArray();
         // pluck() => give a field value from the database
         // pluck() => gives all values of id field
 
-        foreach ($jobListings as &$listing) {
-            // Assign random user id to each job listing
-            $listing['user_id'] = $userIds[array_rand($userIds)];
+        foreach ($jobListings as $index =>  &$listing) {
+
+            // Assing first two job listings to test user
+            if($index < 2){
+                $listing['user_id'] = $testUserId;
+            } else {
+                // Assign random user id to each job listing
+                $listing['user_id'] = $userIds[array_rand($userIds)];
+            }
 
             // Add timestamp
             $listing['created_at'] = now();
