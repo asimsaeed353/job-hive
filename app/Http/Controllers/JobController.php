@@ -16,9 +16,9 @@ class JobController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
-        $jobs = Job::all();
+        $jobs = Job::paginate(6);
         return view('jobs.index')->with('jobs', $jobs);
     }
 
