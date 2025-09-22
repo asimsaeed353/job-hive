@@ -9,6 +9,10 @@
             <x-nav-link url='/jobs' :active="request()->is('jobs')">All Jobs</x-nav-link>
             @auth
                 <x-nav-link url='/bookmarks' :active="request()->is('bookmarks')">Saved Jobs</x-nav-link>
+                <form method="POST" action="{{route('logout')}}">
+                    @csrf
+                    <button type="submit">Logout</button>
+                </form>
 
                 <div class="flex items-center space-x-3">
                     <a href="{{route('dashboard')}}">

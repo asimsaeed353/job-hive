@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApplicantController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JobController;
@@ -34,3 +35,6 @@ Route::middleware('auth')->group(function(){
     Route::post('/bookmarks/{job}', [BookmarkController::class, 'store'])->name('bookmarks.store');
     Route::delete('/bookmarks/{job}', [BookmarkController::class, 'destroy'])->name('bookmarks.destroy');
 });
+
+Route::post('/jobs/{job}/apply', [ApplicantController::class, 'store'])->name('application.store')->middleware('auth');
+Route::delete('/applicants/{applicant}', [ApplicantController::class, 'destroy'])->name('applicant.destroy')->middleware('auth');
